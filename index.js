@@ -3,9 +3,18 @@ const url = require('url')
 const fs = require('fs')
 const replaceTemplate = require('./modules/replaceTemplate')
 
-const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf-8')
-const tempCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, 'utf-8')
-const tempProduct = fs.readFileSync(`${__dirname}/templates/template-product.html`, 'utf-8')
+const tempOverview = fs.readFileSync(
+    `${__dirname}/templates/template-overview.html`,
+    'utf-8'
+)
+const tempCard = fs.readFileSync(
+    `${__dirname}/templates/template-card.html`,
+    'utf-8'
+)
+const tempProduct = fs.readFileSync(
+    `${__dirname}/templates/template-product.html`,
+    'utf-8'
+)
 
 const data = fs.readFileSync(`${__dirname}/data.json`, 'utf-8')
 const dataObj = JSON.parse(data)
@@ -16,7 +25,9 @@ const server = http.createServer((req, res) => {
     if (pathname === '/' || pathname === '/overview') {
         res.writeHead(200, { 'Content-type': 'text/html' })
 
-        const cardsHtml = dataObj.map(el => replaceTemplate(tempCard, el)).join('')
+        const cardsHtml = dataObj
+            .map((el) => replaceTemplate(tempCard, el))
+            .join('')
         const output = tempOverview.replace('{%PRODUCT_CARD%}', cardsHtml)
 
         res.end(output)
@@ -28,7 +39,7 @@ const server = http.createServer((req, res) => {
         res.end(output)
     } else if (pathname === '/api') {
         res.writeHead(200, {
-            'Content-type': 'application/json'
+            'Content-type': 'application/json',
         })
         res.end(data)
     } else {
@@ -41,5 +52,5 @@ const server = http.createServer((req, res) => {
 })
 
 server.listen(3000, '127.0.0.1', () => {
-    console.log("Listening for requests on port 3000")
+    console.log('Listening for requests on port 3000')
 })
